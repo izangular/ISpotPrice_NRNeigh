@@ -3,17 +3,41 @@
     <ion-title>
       Map
     </ion-title>
-    <ion-searchbar [(ngModel)]="autocomplete.query" [showCancelButton]="true"   (ionInput)="updateSearch()" (ionCancel)="dismiss()"></ion-searchbar>
-     <ion-item *ngFor="let item of autocompleteItems" tappable   (click)="chooseItem(item)">
+
+    <ion-searchbar [(ngModel)]="autocomplete.query" [showCancelButton]="true" (ionInput)="updateSearch()" (ionCancel)="dismiss()"></ion-searchbar>
+    <ion-item class="zipTownList" *ngFor="let item of autocompleteItems" tappable (click)="chooseItem(item)">
       {{ item }}
     </ion-item>
-    <ion-buttons end>
-      <button ion-button (click)="addMarker()"><ion-icon name="add"></ion-icon>Add Marker</button>
-    </ion-buttons>  
   </ion-navbar>
 </ion-header>
- 
+
 <ion-content>
-  
-  <div #map id="map"></div>  
+  <ion-fab top="" left="" class="inputProperties">
+    <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list>
+      <ion-item>
+        <ion-label>Layers</ion-label>
+        <ion-select [(ngModel)]="layers" (ngModelChange)="onLayerChange(layers)">
+          <ion-option value="0">Properties</ion-option>
+          <ion-option value="1">Contracts</ion-option>
+        </ion-select>
+      </ion-item>
+      <ion-item>
+        <ion-label>PropertyTypes</ion-label>
+        <ion-select [(ngModel)]="propertyType">  <!--[(ngModel)]="propertyType"-->
+          <ion-option *ngFor="let propertyType of propertyTypes" [(ngModel)]="propertyType.value" ngDefaultControl>{{propertyType.label}}</ion-option>
+        </ion-select>
+      </ion-item>
+       <ion-item>
+        <ion-label>Comparable</ion-label>
+        <ion-select [(ngModel)]="nbComparableProperties" (ngModelChange)="onComparablePropertyChange()">
+          <ion-option value="5">5</ion-option>
+          <ion-option value="7">7</ion-option>
+          <ion-option value="10">10</ion-option>
+          <ion-option value="15">15</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-fab-list>
+  </ion-fab>
+  <div #map id="map"></div>
 </ion-content>

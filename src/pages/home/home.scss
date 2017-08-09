@@ -2,3 +2,20 @@
 #map {  
   height: 100%;
 }
+
+.inputProperties{
+  //width:100%;
+  z-index: 3;
+  position: absolute;
+}
+
+.zipTownList{
+  z-index: 2;
+  position: relative;
+}
+
+.fab-list-active{
+  width:100%;
+  position:relative;
+  margin:30px;
+}

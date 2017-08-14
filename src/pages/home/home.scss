@@ -1,12 +1,15 @@
 
 #map {  
   height: 100%;
+ // position:relative;
+  //z-index:4;
 }
 
 .inputProperties{
   //width:100%;
   z-index: 3;
   position: absolute;
+  background-color: white;
 }
 
 .zipTownList{
@@ -18,4 +21,68 @@
   width:100%;
   position:relative;
   margin:30px;
+}
+
+.testitems{
+  z-index: 3;
+width:200px;
+height:300px;
+margin:20px;
+}
+
+.medianbutton  {
+    //background-color: lightgray;
+    padding: 0;
+border: none;
+background: none;
+color:white;
+}
+
+.medianbutton:active,
+.medianbutton:focus {     
+   //background-color: blue;    
+    padding: 0;
+    background: none;
+    color:white;
+    border-bottom:  solid #ffffff;
+}
+
+.output{
+ font-size:small;
+}
+
+ion-fab-list[side="left"] {
+margin: 10px 66px 0 0;}
+
+
+.resultbuttonblock{
+  background-color: orange
+}
+
+.fab-md{
+  background-color: orange;
+}
+
+ion-select{
+  max-width: 100% !important;
+}
+
+.inputbutton{
+  width:40px;
+  height:40px;
+  margin-top:4px;
+}
+
+.inputpropertieslist{
+  position: absolute;
+width: 200px;
+margin: 10px 0px 0 0;
+}
+
+.alert-head{
+  display:none;
+}
+
+.alert-message{
+  display:none;
 }

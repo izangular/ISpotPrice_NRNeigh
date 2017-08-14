@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, NgZone, OnInit } from '@angular/core';
-import { NavController, ViewController } from 'ionic-angular';
+import { NavController, ViewController, LoadingController,Events } from 'ionic-angular';
 import { ApiService } from '../../providers/api-service';
-import { IRentData } from './IRentData';
+import { IRentData, IRentalUnitContract, IRentalUnitFinancial } from './IRentData';
 
 declare var google;
 
@@ -11,40 +11,104 @@ declare var google;
   providers: [ApiService]
 })
 export class HomePage implements OnInit {
+
   private propertyTypes = [];
   private layers: string;
-  //public rentData: IRentData;
 
-  public latitude: number;
-  public longitude: number;
+  public latitude: number = 0;
+  public longitude: number = 0;
   private year: number;
   private filter: string;
   private culture: string;
   private nbComparableProperties: number;
-  private propertyType:number;
+  private propertyType: any;
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
 
   autocompleteItems;
   autocomplete;
+  location;
   service = new google.maps.places.AutocompleteService();
+  rentalFinancials: IRentalUnitFinancial;
+  rentalContracts: IRentalUnitContract;
+
+  public Average: boolean;
+  public Median: boolean;
+  public Properties: boolean;
+  public Contracts: boolean;
+  public activebutton: number;
+  //show:any;
 
   constructor(private navCtrl: NavController, private viewCtrl: ViewController,
-    private zone: NgZone, private apiService: ApiService) {
+    private zone: NgZone, private apiService: ApiService, private loadingCtrl:LoadingController,private events:Events) {
+
     this.autocompleteItems = [];
     this.autocomplete = {
       query: ''
     };
+
+    this.propertyType = {
+      value: ''
+    };
+
+    this.Average = true;
+    this.Median = false;
+    this.Properties = true;
+    this.Contracts = false;   
   }
 
-  ngOnInit(){
-    this.latitude = 0;
-    this.longitude = 0;
+  ngOnInit() {
+     localStorage.clear();
+    this.initialiseVariables();
+
+  }
+
+  initialiseVariables() {
+    this.layers = "0";
+    this.onLayerChange(this.layers);
+    this.nbComparableProperties = 5;
+    this.propertyType.value = 0;
     this.year = 2016;
     this.culture = 'en-US';
+
+    this.rentalFinancials = {
+      maximalDistance: null,
+      medianMarketValuePerSquareMeter: null,
+      medianExpectedRentPerSquareMeter: null,
+      medianExpectedRentPerMarketValue: null,
+      medianOtherIncomePerSquareMeter: null,
+      medianOperatingExpensesPerNetRent: null,
+      medianMaintenanceAndInvestmentsPerNetRent: null,
+      medianUnrealizedRentPerNetRent: null,
+      medianNcfPerSquareMeter: null,
+      medianNcfPerMarketValue: null,
+      medianValueChangePerMarketValue: null,
+      medianPerformancePerMarketValue: null,
+      medianTotalExpensesPerNetRent: null,
+
+      meanMarketValuePerSquareMeter: null,
+      meanExpectedRentPerSquareMeter: null,
+      meanExpectedRentPerMarketValue: null,
+      meanOtherIncomePerSquareMeter: null,
+      meanOperatingExpensesPerNetRent: null,
+      meanMaintenanceAndInvestmentsPerNetRent: null,
+      meanUnrealizedRentPerNetRent: null,
+      meanNcfPerSquareMeter: null,
+      meanNcfPerMarketValue: null,
+      meanValueChangePerMarketValue: null,
+      meanPerformancePerMarketValue: null,
+      meanTotalExpensesPerNetRent: null,
+    };
+
+    this.rentalContracts = {
+      maximalDistance: null,
+      medianNetRentPerSquareMeter: null
+    };
+
+
   }
- 
+
   dismiss() {
     //this.viewCtrl.dismiss();
   }
@@ -53,26 +117,26 @@ export class HomePage implements OnInit {
     //this.viewCtrl.dismiss(item);
     this.autocompleteItems = [];
     this.autocomplete.query = item;
-    
-    var geocoder = new google.maps.Geocoder();
-    this.geocodeAddress(geocoder, this.map);
+
+    this.loadMap();
+
   }
 
-  geocodeAddress(geocoder, resultsMap) {
+
+  loadMap() {
+    var geocoder = new google.maps.Geocoder();
     var address = this.autocomplete.query;
-    geocoder.geocode({ 'address': address }, function (results, status) {
+    var resultsMap = this.map;
+    
+    geocoder.geocode({ 'address': address }, (results, status) => {
       if (status === 'OK') {
-        resultsMap.setCenter(results[0].geometry.location);
        
+        resultsMap.setCenter(results[0].geometry.location);
 
-        this.latitude = Number(results[0].geometry.location.lat().toFixed(10));
-        this.longitude = Number(results[0].geometry.location.lng().toFixed(10));
-        localStorage.setItem("lat",this.latitude);
-        localStorage.setItem("lon",this.longitude);
-
-        console.log("Lat: " + this.latitude)
-        console.log("Lon: " + this.longitude)
-
+        //set lat lon in local storage//
+        localStorage.setItem("lat", results[0].geometry.location.lat().toFixed(10));
+        localStorage.setItem("lon", results[0].geometry.location.lng().toFixed(10));
+        
         var marker = new google.maps.Marker({
           map: resultsMap,
           position: results[0].geometry.location
@@ -88,13 +152,21 @@ export class HomePage implements OnInit {
           strokeWeight: 1
         });
 
+        this.serviceCall();
+        
       } else {
         alert('Geocode was not successful for the following reason: ' + status);
       }
+
+       
     });
+
+   
   }
 
-
+private test(){
+  console.log("test");
+}
   updateSearch() {
     if (this.autocomplete.query == '') {
       this.autocompleteItems = [];
@@ -104,76 +176,66 @@ export class HomePage implements OnInit {
 
     this.service.getPlacePredictions({ input: this.autocomplete.query, componentRestrictions: { country: 'CH' } }, function (predictions, status) {
       me.autocompleteItems = [];
+      if(predictions != null) {
       me.zone.run(function () {
         predictions.forEach(function (prediction) {
           me.autocompleteItems.push(prediction.description);
         });
       });
+      }
     });
   }
 
   ionViewDidLoad() {
     console.log('test');
-    this.loadMap(new google.maps.LatLng(47.40799130707436, 8.555858796993675));
+    this.initMap(new google.maps.LatLng(47.40799130707436, 8.555858796993675));
   }
 
-  loadMap(latLng) {
-
-    //let latLng = new google.maps.LatLng(47.40799130707436, 8.555858796993675);
-
+  initMap(latLng) {
     let mapOptions = {
       center: latLng,
       zoom: 17,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
 
-    this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
+   this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
 
   }
 
   onLayerChange(layer) {
-    console.log(this.layers);
-    console.log("Lat: " + this.latitude)
-    console.log("Lon: " + this.longitude)
+    localStorage.setItem("layer", layer);
     switch (this.layers) {
-      case "0": this.propertyTypes = this.getPropertyTypes(); break;
-      case "1": this.propertyTypes = this.getContractTypes(); break;
+      case "0": this.propertyTypes = this.getPropertyTypes(); this.Properties = true; this.Contracts = false; break;
+      case "1": this.propertyTypes = this.getContractTypes(); this.Contracts = true; this.Properties = false; break;
       default: this.propertyTypes = this.getPropertyTypes(); break;
     }
 
+    this.serviceCall();
+  }
+
+  propertyTypeChange(){
+    console.log("PropertyType");
+    this.serviceCall();
+  }
+
+  median() {
+    console.log("median");
+    this.Median = true;
+    this.Average = false;
+
+  }
+
+  average() {
+    console.log("average");
+    this.Average = true;
+    this.Median = false;
   }
 
   onComparablePropertyChange() {
-    console.log(this.layers);
-    console.log(this.nbComparableProperties)
-    console.log(this.year)
-    console.log(this.culture)
-    console.log(this.propertyType)
-    console.log(Number(localStorage.getItem("lat")))
-    console.log(Number(localStorage.getItem("lon")))
 
-    //Service Call Example//
-    this.apiService.rentFinancials( Number(localStorage.getItem("lat")), Number(localStorage.getItem("lon")), this.year, this.culture, 
-                                   "propertyType=" + "0", this.nbComparableProperties).
-      subscribe(
-      (data) => {
-        console.log("RentFinancials " + data.rentalUnitFinancial.medianMarketValuePerSquareMeter);
-      },
-      (error) => {
-        console.log(error);
-      }
-      )
+    localStorage.setItem("onComparableProperty", String(this.nbComparableProperties))
 
-    this.apiService.rentContracts( Number(localStorage.getItem("lat")), Number(localStorage.getItem("lon")), this.culture, 
-                                   "objectType=" + "0", this.nbComparableProperties).
-      subscribe(
-      (data) => {
-        console.log("RentContracts " + data.rentalUnitContract.medianNetRentPerSquareMeter);
-      },
-      (error) => {
-        console.log(error);
-      }
-      )
+    this.serviceCall();
 
   }
 
@@ -217,5 +279,99 @@ export class HomePage implements OnInit {
     return ns;
   }
 
+ serviceCall() {
+
+    console.log("layers: " + this.layers);
+
+    if (localStorage.getItem("lat") !== null && localStorage.getItem("lon") !== null) {
+      if (this.layers == "0")
+        this.callRentFinancials();
+      else
+        this.callRentContracts();
+    }
+  }
+
+  callRentFinancials() {
+      let loading = this.loadingCtrl.create({
+        spinner: 'bubbles',
+        content: 'Estimation in Progress...'
+      }); 
+      loading.present();
+
+    this.apiService.rentFinancials(Number(localStorage.getItem("lat")), Number(localStorage.getItem("lon")), this.year, this.culture,
+      "propertyType=" + this.propertyType.value, this.nbComparableProperties).
+      subscribe(
+      (data) => {
+        console.log(data);
+
+        this.rentalFinancials.maximalDistance = data.rentalUnitFinancial.maximalDistance;
+
+        this.rentalFinancials.medianMarketValuePerSquareMeter = data.rentalUnitFinancial.medianMarketValuePerSquareMeter;
+        this.rentalFinancials.medianExpectedRentPerSquareMeter = data.rentalUnitFinancial.medianExpectedRentPerSquareMeter;
+        this.rentalFinancials.medianExpectedRentPerMarketValue = data.rentalUnitFinancial.medianExpectedRentPerMarketValue;
+        this.rentalFinancials.medianOtherIncomePerSquareMeter = data.rentalUnitFinancial.medianOtherIncomePerSquareMeter;
+        this.rentalFinancials.medianOperatingExpensesPerNetRent = data.rentalUnitFinancial.medianOperatingExpensesPerNetRent;
+        this.rentalFinancials.medianMaintenanceAndInvestmentsPerNetRent = data.rentalUnitFinancial.medianMaintenanceAndInvestmentsPerNetRent;
+        this.rentalFinancials.medianUnrealizedRentPerNetRent = data.rentalUnitFinancial.medianUnrealizedRentPerNetRent;
+        this.rentalFinancials.medianNcfPerSquareMeter = data.rentalUnitFinancial.medianNcfPerSquareMeter;
+        this.rentalFinancials.medianNcfPerMarketValue = data.rentalUnitFinancial.medianNcfPerMarketValue;
+        this.rentalFinancials.medianValueChangePerMarketValue = data.rentalUnitFinancial.medianValueChangePerMarketValue;
+        this.rentalFinancials.medianPerformancePerMarketValue = data.rentalUnitFinancial.medianPerformancePerMarketValue;
+        this.rentalFinancials.medianTotalExpensesPerNetRent = data.rentalUnitFinancial.medianTotalExpensesPerNetRent;
+
+        this.rentalFinancials.meanMarketValuePerSquareMeter = data.rentalUnitFinancial.meanMarketValuePerSquareMeter;
+        this.rentalFinancials.meanExpectedRentPerSquareMeter = data.rentalUnitFinancial.meanExpectedRentPerSquareMeter;
+        this.rentalFinancials.meanExpectedRentPerMarketValue = data.rentalUnitFinancial.meanExpectedRentPerMarketValue;
+        this.rentalFinancials.meanOtherIncomePerSquareMeter = data.rentalUnitFinancial.meanOtherIncomePerSquareMeter;
+        this.rentalFinancials.meanOperatingExpensesPerNetRent = data.rentalUnitFinancial.meanOperatingExpensesPerNetRent;
+        this.rentalFinancials.meanMaintenanceAndInvestmentsPerNetRent = data.rentalUnitFinancial.meanMaintenanceAndInvestmentsPerNetRent;
+        this.rentalFinancials.meanUnrealizedRentPerNetRent = data.rentalUnitFinancial.meanUnrealizedRentPerNetRent;
+        this.rentalFinancials.meanNcfPerSquareMeter = data.rentalUnitFinancial.meanNcfPerSquareMeter;
+        this.rentalFinancials.meanNcfPerMarketValue = data.rentalUnitFinancial.meanNcfPerMarketValue;
+        this.rentalFinancials.meanValueChangePerMarketValue = data.rentalUnitFinancial.meanValueChangePerMarketValue;
+        this.rentalFinancials.meanPerformancePerMarketValue = data.rentalUnitFinancial.meanPerformancePerMarketValue;
+        this.rentalFinancials.meanTotalExpensesPerNetRent = data.rentalUnitFinancial.meanTotalExpensesPerNetRent;
+
+        this.Properties = true;
+        this.Contracts = false;
+
+      },
+      (error) => {
+        console.log(error);
+      },
+      ()=>{
+                 loading.dismiss();
+          }
+      )
+  }
+
+  callRentContracts() {
+     let loading = this.loadingCtrl.create({
+        spinner: 'bubbles',
+        content: 'Estimation in Progress...'
+      }); 
+      loading.present();
+      
+    this.apiService.rentContracts(Number(localStorage.getItem("lat")), Number(localStorage.getItem("lon")), this.culture,
+      "objectType=" + this.propertyType.value, this.nbComparableProperties).
+      subscribe(
+      (data) => {
+        console.log(data.maximalDistance);
+        console.log(data.medianNetRentPerSquareMeter);
+        this.rentalContracts.maximalDistance = data.rentalUnitContract.maximalDistance;
+        this.rentalContracts.medianNetRentPerSquareMeter = data.rentalUnitContract.medianNetRentPerSquareMeter;
+
+        this.Contracts = true;
+        this.Properties = false;
+
+      },
+      (error) => {
+        console.log(error);
+      },
+      ()=>{
+                 loading.dismiss();
+          }    
+      )
+  }
 
 }

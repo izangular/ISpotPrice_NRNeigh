@@ -1,35 +1,40 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>
-      Map
-    </ion-title>
 
-    <ion-searchbar [(ngModel)]="autocomplete.query" [showCancelButton]="true" (ionInput)="updateSearch()" (ionCancel)="dismiss()"></ion-searchbar>
-    <ion-item class="zipTownList" *ngFor="let item of autocompleteItems" tappable (click)="chooseItem(item)">
-      {{ item }}
+  <div style="display:flex">
+<ion-searchbar [(ngModel)]="autocomplete.query" [showCancelButton]="true" (ionInput)="updateSearch()" (ionCancel)="dismiss()"></ion-searchbar>
+<!--<button ><ion-icon name="add" ></ion-icon>Forgot</button>-->
+
+<!--<button ion-fab class="inputbutton"><ion-icon name="add" ></ion-icon></button>-->
+<div>
+  <ion-fab middle="" right="" style="z-index:2">
+    <button ion-fab mini><ion-icon name="more" ></ion-icon></button>
+    <ion-fab-list side="left" class="inputpropertieslist" style="position: absolute;
+width: 200px;
+margin: 50px 10px 0 0;background-color: white;" >
+<ion-grid>
+  <div >
+<ion-row>
+  <ion-col>
+    <ion-item>
+      <ion-select [(ngModel)]="layers" (ngModelChange)="onLayerChange(layers)">
+        <ion-option value="0">Properties</ion-option>
+        <ion-option value="1">Contracts</ion-option>
+      </ion-select>
     </ion-item>
-  </ion-navbar>
-</ion-header>
-
-<ion-content>
-  <ion-fab top="" left="" class="inputProperties">
-    <button ion-fab mini><ion-icon name="add"></ion-icon></button>
-    <ion-fab-list>
+  </ion-col>
+</ion-row>
+  <ion-row>
+    <ion-col>
       <ion-item>
-        <ion-label>Layers</ion-label>
-        <ion-select [(ngModel)]="layers" (ngModelChange)="onLayerChange(layers)">
-          <ion-option value="0">Properties</ion-option>
-          <ion-option value="1">Contracts</ion-option>
+        <ion-select [(ngModel)]="propertyType.value" (ngModelChange)="propertyTypeChange()">
+          <ion-option *ngFor="let propertyType of propertyTypes" value={{propertyType.value}} ngDefaultControl>{{propertyType.label}}</ion-option>
         </ion-select>
       </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
       <ion-item>
-        <ion-label>PropertyTypes</ion-label>
-        <ion-select [(ngModel)]="propertyType">  <!--[(ngModel)]="propertyType"-->
-          <ion-option *ngFor="let propertyType of propertyTypes" [(ngModel)]="propertyType.value" ngDefaultControl>{{propertyType.label}}</ion-option>
-        </ion-select>
-      </ion-item>
-       <ion-item>
-        <ion-label>Comparable</ion-label>
         <ion-select [(ngModel)]="nbComparableProperties" (ngModelChange)="onComparablePropertyChange()">
           <ion-option value="5">5</ion-option>
           <ion-option value="7">7</ion-option>
@@ -37,7 +42,327 @@
           <ion-option value="15">15</ion-option>
         </ion-select>
       </ion-item>
-    </ion-fab-list>
-  </ion-fab>
-  <div #map id="map"></div>
+    </ion-col>
+  </ion-row>
+</div>
+</ion-grid>
+
+</ion-fab-list>
+</ion-fab>
+
+</div>
+</div>
+<ion-item class="zipTownList" *ngFor="let item of autocompleteItems" tappable (click)="chooseItem(item)">
+  {{ item }}
+</ion-item>
+
+</ion-header>
+
+<ion-content class="has-header has-subheader">
+
+<div class="resultpanel">
+  <ion-fab bottom="" right="">
+    <button ion-fab mini><ion-icon name="add"></ion-icon></button>
+    <ion-fab-list side="left">
+      <ion-item class="output">
+
+        <ion-grid>
+          <ion-row class="resultbuttonblock">
+            <ion-col col-6>
+              <button ion-button class="medianbutton" id="medianbutton" ngClass="{'active': true }" full outline (click)="median()">Median</button>
+            </ion-col>
+            <ion-col col-6>
+              <button ion-button class="medianbutton" id="averagebutton"  full outline (click)="average()">Average</button>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <!-- Average -->
+              <div *ngIf="Median">
+
+                <!-- RentalFinancial -->
+                <div *ngIf="Properties">
+                  <ion-row style="text-align: center">
+<ion-col>
+  <strong>KPI</strong>
+</ion-col>
+<ion-col>
+  <strong>Value</strong>
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Radius
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.maximalDistance | number:'.0-0'}}m
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Value/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center"> CHF {{rentalFinancials.medianMarketValuePerSquareMeter | number:'.2-2' }}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Expected rent/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center"> CHF {{rentalFinancials.medianExpectedRentPerSquareMeter | number:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Gross return
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianExpectedRentPerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Vacancy rate
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianUnrealizedRentPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    OpEx in % of rents
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianOperatingExpensesPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    CapEx in % of rents
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianMaintenanceAndInvestmentsPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Total outflows in % of rents
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianTotalExpensesPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Net cash flow/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center"> CHF {{rentalFinancials.medianNcfPerSquareMeter | number:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    NCF Return
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianNcfPerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Change in value
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianValueChangePerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Total Performance
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.medianPerformancePerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+</div>
+<!-- Contracts -->
+<div *ngIf="Contracts">
+  <ion-row style="text-align: center">
+<ion-col>
+  <strong>KPI</strong>
+</ion-col>
+<ion-col>
+  <strong>Value</strong>
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Radius
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalContracts.maximalDistance | number:'.0-0'}} m
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Expected rent/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center"> CHF {{rentalContracts.medianNetRentPerSquareMeter | number:'.2-2' }}
+</ion-col>
+</ion-row>
+</div>
+</div>
+<div *ngIf="Average">
+
+  <!-- RentalFinancial -->
+  <div *ngIf="Properties">
+    <ion-row style="text-align:center;">
+<ion-col>
+  <strong>KPI</strong>
+</ion-col>
+<ion-col>
+  <strong>Value</strong>
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Radius
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.maximalDistance | number:'.0-0'}}m
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Value/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center"> CHF {{rentalFinancials.meanMarketValuePerSquareMeter | number:'.2-2' }}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Expected rent/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center"> CHF {{rentalFinancials.meanExpectedRentPerSquareMeter | number:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Gross return
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanExpectedRentPerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Vacancy rate
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanUnrealizedRentPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    OpEx in % of rents
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanOperatingExpensesPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    CapEx in % of rents
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanMaintenanceAndInvestmentsPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Total outflows in % of rents
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanTotalExpensesPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Net cash flow/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center"> CHF {{rentalFinancials.meanNcfPerSquareMeter | number:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    NCF Return
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanNcfPerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Change in value
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanValueChangePerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Total Performance
+  </ion-col>
+  <ion-col style="text-align: center"> {{rentalFinancials.meanPerformancePerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+</div>
+<!-- Contracts -->
+<div *ngIf="Contracts">
+  <ion-row style="text-align: center">
+<ion-col>
+  <strong>KPI</strong>
+</ion-col>
+<ion-col>
+  <strong>Value</strong>
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Radius
+  </ion-col>
+  <ion-col style="text-align: center">{{rentalContracts.maximalDistance | number:'.0-0'}} m
+</ion-col>
+</ion-row>
+
+<ion-row>
+  <ion-col>
+    Expected rent/m<sup>2</sup>
+  </ion-col>
+  <ion-col style="text-align: center">CHF {{rentalContracts.medianNetRentPerSquareMeter | number:'.2-2' }}
+</ion-col>
+</ion-row>
+</div>
+</div>
+</ion-col>
+</ion-row>
+</ion-grid>
+<!--</div>-->
+
+</ion-item>
+
+
+
+</ion-fab-list>
+</ion-fab>
+</div>
+<div #map id="map"></div>
 </ion-content>

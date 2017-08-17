@@ -1,0 +1,54 @@
+<ion-content style="background-color: gray">
+<div class="registerform">
+
+<ion-list no-lines>
+       <div class="accountform">  
+       <div class="account">
+       </div>
+       <ion-label style="color:white;text-align: center;font-size:medium;font-weight:bold">Create Account</ion-label>
+   
+    <form [formGroup]="registerform" style="margin-left: auto;margin-right: auto;text-align:center">
+       <ion-label *ngIf="errorMessage" style="color:#f55151;text-align: center;font-size:large;font-weight:bold">{{errorMessage}}</ion-label>
+        <ion-item>
+            <ion-label stacked style="color:white">First Name</ion-label>
+            <ion-input formControlName="firstName" type="text" style="border-bottom:1px solid white"></ion-input>
+        </ion-item>
+
+         <ion-item *ngIf="!registerform.controls.firstName.valid  &&  submitAttempt">
+                <p style="color:#f55151">Please enter first name.</p>
+         </ion-item>
+ 
+        <ion-item>
+            <ion-label class="inputlabel" stacked style="color:white">Last Name</ion-label>
+            <ion-input formControlName="lastName" type="text" style="border-bottom:1px solid white"></ion-input>
+        </ion-item>
+
+         <ion-item *ngIf="!registerform.controls.lastName.valid  &&  submitAttempt">
+                <p style="color:#f55151">Please enter last name.</p>
+         </ion-item>
+
+        <ion-item>
+            <ion-label class="inputlabel" stacked style="color:white">Email</ion-label>
+            <ion-input formControlName="email" type="text" style="border-bottom:1px solid white"></ion-input>
+        </ion-item>
+
+         <ion-item *ngIf="!registerform.controls.email.valid  &&  submitAttempt">
+                <p style="color:#f55151">Please enter email.</p>
+         </ion-item>
+
+         <ion-item>
+            <ion-label class="inputlabel" stacked style="color:white">Phone Number</ion-label>
+            <ion-input formControlName="phoneNumber" type="text" style="border-bottom:1px solid white"></ion-input>
+        </ion-item>
+
+         <ion-item *ngIf="!registerform.controls.email.valid  &&  submitAttempt">
+                <p style="color:#f55151">Please enter phone number.</p>
+         </ion-item>
+ 
+        <button class="registerbutton" ion-button round  color="primary" (click)="register()">Register</button>
+ 
+    </form>
+    </div>
+</ion-list>
+</div>
+</ion-content>

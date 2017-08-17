@@ -1,5 +1,5 @@
 
-#map {  
+#map {
   height: 100%;
  // position:relative;
   //z-index:4;
@@ -9,12 +9,14 @@
   //width:100%;
   z-index: 3;
   position: absolute;
-  background-color: white;
+  //background-color: lightblue;
 }
 
 .zipTownList{
   z-index: 2;
   position: relative;
+ // background-color: lightgray;
+ //color: #656363
 }
 
 .fab-list-active{
@@ -30,22 +32,22 @@ height:300px;
 margin:20px;
 }
 
-.medianbutton  {
-    //background-color: lightgray;
-    padding: 0;
-border: none;
-background: none;
-color:white;
-}
+// .medianbutton  {
+//     //background-color: lightgray;
+//     padding: 0;
+// border: none;
+// background: none;
+// color:white;
+// }
 
-.medianbutton:active,
-.medianbutton:focus {     
-   //background-color: blue;    
-    padding: 0;
-    background: none;
-    color:white;
-    border-bottom:  solid #ffffff;
-}
+// .medianbutton:active,
+// .medianbutton:focus {
+//    //background-color: blue;
+//     padding: 0;
+//     background: none;
+//     color:white;
+//     border-bottom:  solid #ffffff;
+// }
 
 .output{
  font-size:small;
@@ -55,9 +57,9 @@ ion-fab-list[side="left"] {
 margin: 10px 66px 0 0;}
 
 
-.resultbuttonblock{
-  background-color: orange
-}
+// .resultbuttonblock{
+//   background-color: orange
+// }
 
 .fab-md{
   background-color: orange;
@@ -85,4 +87,107 @@ margin: 10px 0px 0 0;
 
 .alert-message{
   display:none;
+}
+
+.item-md{
+  //color:white;
+  //padding-left:0px;
+}
+
+.inputpropertydiv .item-md.item-block .item-inner{
+  border:0px;
+}
+
+ .item-md.item-block .item-inner{
+     border:0px;
+ }
+
+.select-icon{
+  display:none
+}
+
+.select-text{
+  display:none;
+}
+
+.icon-button{
+  background-color:transparent;
+}
+
+.icon:after{
+    content: '';
+    display: block;
+    height: 40px;  /*height of icon */
+    width: 40px;  /*width of icon */
+    position: absolute;
+      /*where to replace the icon */
+    top: 0px;
+    left: -40px;
+      /*background */
+    //background: #F8E6AE url(ico.gif) no-repeat 0px 0px;
+}
+
+#inputpropertydiv{
+  content: '';
+  background: url(../assets/property.png) no-repeat  center center ;
+}
+
+
+#inputpropertytypediv{
+  content: '';
+  background: url(../assets/propertytype.png) no-repeat  center center ;
+}
+
+
+#inputcomparablepropertydiv{
+  content: '';
+  background: url(../assets/comparableproperty.png) no-repeat  center center ;
+}
+
+.alert-md .alert-wrapper{
+  background-color: #2f2e2e;
+}
+
+
+
+.alert-radio-icon{
+  background-color: orange;
+}
+
+.alert-md [aria-checked="true"] .alert-radio-icon {
+    border-color:white;
+}
+
+.alert-md .alert-radio-inner{
+  background-color: orange;
+}
+
+.alert-md [aria-checked=true] .alert-radio-label {
+    color:white;
+}
+
+.alert-md .alert-radio-label{
+   color: #fbfbfb;
+}
+
+.input-row .button-inner{
+  color : orange;
+}
+
+.alert-md .alert-radio-group, .alert-md .alert-checkbox-group{
+  border-top: 0px;
+}
+
+.alert-md .alert-button{
+  color:orange;
+}
+
+.footerlabel .label-md{
+  margin:2px;
+  color: white;
+  font-weight: bold;
+}
+
+.inputheader{
+  background-color: #656363;
 }

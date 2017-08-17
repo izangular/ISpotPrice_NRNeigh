@@ -1,0 +1,44 @@
+
+.segment-md .segment-button{
+    color:white;
+    background-color: orange;
+}
+
+.segment-md .segment-button.activated, .segment-md .segment-button.segment-activated {
+    border-color: #ebf0f8;
+    opacity: 1;
+}
+
+// .input-wrapper{
+//     background-color: rgba(28,28,28,0.8);
+// color: white;
+// }
+
+.ion-col{
+    border-left: 0.1px solid orange;
+border-right: 0.1px solid orange;
+}
+
+ .toolbar-background-md {
+    border-color: #4d4949;
+    background: #4d4949;
+}
+
+.toolbar-title-md{
+    color:white;
+}
+
+.back-button-icon-md{
+    color:white;
+}
+
+.rows{
+    border-top:0.1px solid orange;
+    border-left:0.1px solid orange;
+    border-right:0.1px solid orange;
+    
+}
+
+.lastrow{
+    border-bottom:0.1px solid orange;
+}

@@ -1,0 +1,83 @@
+.inputfield{
+    border-bottom:1px solid orange;
+}
+
+.registerform{
+    //margin-left: 10px;
+    //margin-right:10px;
+    background-color: gray;
+}
+
+.list-md .item-input:last-child{
+    border-bottom: 0px solid #dedede;
+}
+
+.registerform .item-md{
+    background-color:transparent;
+}
+
+.scrll-content{
+    background-color: gray;
+}
+
+.registerform {
+    background-color:rgba(47,46,46,0.6);
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: relative;
+    margin:auto;
+    width:90%;
+    //height:90%;
+    margin-top:50px;
+    margin-bottom:50px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.register-form .label-md-primary, .item-input .label-md-primary, .item-select .label-md-primary, .item-datetime .label-md-primary {
+    color: #f6f8fe;
+}
+
+.register-form .item-md.item-block .item-inner{
+    //border-bottom-color: orange;
+}
+
+.registerbutton{
+    background-color: orange;
+    color:white;
+    margin-top:20px; 
+    //padding-bottom:10px;  
+}
+
+.inputlabel{
+    color:white;
+}
+
+input:focus {
+    outline:none;
+}
+
+.button-md-primary:hover:not(.disable-hover) {
+    background-color: orange;
+}
+
+.account{
+ content: '';
+ background: url(../assets/user.png) no-repeat  center center;
+ height:50px;
+}
+
+.accountform{
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    position: relative;
+    margin:auto;
+    width:90%;
+    //height:100%;
+    margin-top:50px;
+    margin-bottom:50px;
+}

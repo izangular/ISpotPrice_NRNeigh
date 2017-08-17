@@ -1,7 +1,9 @@
 import { Component, ViewChild, ElementRef, NgZone, OnInit } from '@angular/core';
-import { NavController, ViewController, LoadingController,Events } from 'ionic-angular';
+import { NavController, ViewController, LoadingController,Events, FabContainer } from 'ionic-angular';
 import { ApiService } from '../../providers/api-service';
 import { IRentData, IRentalUnitContract, IRentalUnitFinancial } from './IRentData';
+import {Register} from '../../pages/register/register';
+import{ResultPanel} from '../../pages/resultpanel/resultpanel';
 
 declare var google;
 
@@ -22,6 +24,7 @@ export class HomePage implements OnInit {
   private culture: string;
   private nbComparableProperties: number;
   private propertyType: any;
+  private propertyLabel:any;
 
   @ViewChild('map') mapElement: ElementRef;
   map: any;
@@ -38,6 +41,8 @@ export class HomePage implements OnInit {
   public Properties: boolean;
   public Contracts: boolean;
   public activebutton: number;
+  public cityCircle = new google.maps.Circle();
+
   //show:any;
 
   constructor(private navCtrl: NavController, private viewCtrl: ViewController,
@@ -56,12 +61,16 @@ export class HomePage implements OnInit {
     this.Median = false;
     this.Properties = true;
     this.Contracts = false;   
+    //this.propertyLabel = "Properties";
   }
 
   ngOnInit() {
      localStorage.clear();
-    this.initialiseVariables();
+     this.initialiseVariables();
 
+    //  if(localStorage.getItem("register") == null){
+    //   this.navCtrl.push(Register);
+    //  }
   }
 
   initialiseVariables() {
@@ -119,7 +128,6 @@ export class HomePage implements OnInit {
     this.autocomplete.query = item;
 
     this.loadMap();
-
   }
 
 
@@ -132,8 +140,9 @@ export class HomePage implements OnInit {
       if (status === 'OK') {
        
         resultsMap.setCenter(results[0].geometry.location);
-
+       
         //set lat lon in local storage//
+        localStorage.setItem("location",results[0].geometry.location)
         localStorage.setItem("lat", results[0].geometry.location.lat().toFixed(10));
         localStorage.setItem("lon", results[0].geometry.location.lng().toFixed(10));
         
@@ -142,15 +151,16 @@ export class HomePage implements OnInit {
           position: results[0].geometry.location
         });
 
-        var cityCircle = new google.maps.Circle({
-          center: results[0].geometry.location,
-          map: resultsMap,
-          radius: 150,
-          fillColor: 'green',
-          fillOpacity: 0.3,
-          strokeColor: 'black',
-          strokeWeight: 1
-        });
+        //this.updateGoogleMapRadius(523);
+        // new google.maps.Circle({
+        //   center: results[0].geometry.location,
+        //   map: resultsMap,
+        //   radius: 150,
+        //   fillColor: 'green',
+        //   fillOpacity: 0.3,
+        //   strokeColor: 'black',
+        //   strokeWeight: 1
+        // });
 
         this.serviceCall();
         
@@ -164,9 +174,16 @@ export class HomePage implements OnInit {
    
   }
 
-private test(){
-  console.log("test");
+private test(rentalFinancials,rentalContracts){
+  console.log("rent:" + rentalFinancials.maximalDistance );
+ 
+  if(this.layers=="0")
+    this.navCtrl.push(ResultPanel,{rentalFinancials:rentalFinancials,rentalContracts:null,address:this.autocomplete.query});
+  else
+        this.navCtrl.push(ResultPanel,{rentalFinancials:null,rentalContracts:rentalContracts,address:this.autocomplete.query});
 }
+
+
   updateSearch() {
     if (this.autocomplete.query == '') {
       this.autocompleteItems = [];
@@ -202,17 +219,29 @@ private test(){
 
   }
 
+
+
   onLayerChange(layer) {
     localStorage.setItem("layer", layer);
+    console.log("layers:" + layer)
     switch (this.layers) {
-      case "0": this.propertyTypes = this.getPropertyTypes(); this.Properties = true; this.Contracts = false; break;
-      case "1": this.propertyTypes = this.getContractTypes(); this.Contracts = true; this.Properties = false; break;
+      case "0": this.propertyTypes = this.getPropertyTypes(); 
+                this.Properties = true; 
+                this.Contracts = false; 
+                this.propertyLabel ="Properties";
+                 break;
+      case "1": this.propertyTypes = this.getContractTypes(); 
+                this.Contracts = true;
+                this.Properties = false; 
+                this.propertyLabel ="Contracts";
+                break;
       default: this.propertyTypes = this.getPropertyTypes(); break;
     }
 
-    this.serviceCall();
+   this.serviceCall();
   }
 
+  
   propertyTypeChange(){
     console.log("PropertyType");
     this.serviceCall();
@@ -332,6 +361,8 @@ private test(){
         this.rentalFinancials.meanPerformancePerMarketValue = data.rentalUnitFinancial.meanPerformancePerMarketValue;
         this.rentalFinancials.meanTotalExpensesPerNetRent = data.rentalUnitFinancial.meanTotalExpensesPerNetRent;
 
+        this.updateGoogleMapRadius(data.rentalUnitFinancial.maximalDistance);
+
         this.Properties = true;
         this.Contracts = false;
 
@@ -361,6 +392,8 @@ private test(){
         this.rentalContracts.maximalDistance = data.rentalUnitContract.maximalDistance;
         this.rentalContracts.medianNetRentPerSquareMeter = data.rentalUnitContract.medianNetRentPerSquareMeter;
 
+        this.updateGoogleMapRadius(data.rentalUnitContract.maximalDistance);
+
         this.Contracts = true;
         this.Properties = false;
 
@@ -373,5 +406,25 @@ private test(){
           }    
       )
   }
+
+  updateGoogleMapRadius(radius){
+         //console.log(localStorage.getItem("location"));
+
+         var resultsMap = this.map;
+         this.cityCircle.setMap(null);
+
+          this.cityCircle = new google.maps.Circle({
+          center: {lat: Number(localStorage.getItem("lat")), lng: Number(localStorage.getItem("lon"))},
+          map: this.map,
+          radius: radius,
+          fillColor: 'green',
+          fillOpacity: 0.3,
+          strokeColor: 'black',
+          strokeWeight: 1
+        });
+
+        this.map.fitBounds(this.cityCircle.getBounds());
+  }
+
 
 }

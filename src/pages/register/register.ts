@@ -48,6 +48,7 @@ export class Register {
                     if (data == "Success") {
                         console.log("success!");
                         localStorage.setItem("register","true");
+                        console.log("RegisterTest: " + localStorage.getItem("register"));
                         this.navCtrl.push(HomePage);                      
                     }
                 },

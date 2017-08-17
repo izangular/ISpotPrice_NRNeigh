@@ -62,12 +62,15 @@ export class HomePage implements OnInit {
     this.Properties = true;
     this.Contracts = false;   
     //this.propertyLabel = "Properties";
+
+    localStorage.removeItem("lat");
+    localStorage.removeItem("lon");
   }
 
   ngOnInit() {
-     localStorage.clear();
+     //localStorage.clear();
      this.initialiseVariables();
-
+     
     //  if(localStorage.getItem("register") == null){
     //   this.navCtrl.push(Register);
     //  }
@@ -128,6 +131,7 @@ export class HomePage implements OnInit {
     this.autocomplete.query = item;
 
     this.loadMap();
+    
   }
 
 

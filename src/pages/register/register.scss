@@ -34,6 +34,7 @@
     margin-bottom:50px;
     padding-top: 10px;
     padding-bottom: 10px;
+    text-align: center
 }
 
 .register-form .label-md-primary, .item-input .label-md-primary, .item-select .label-md-primary, .item-datetime .label-md-primary {
@@ -80,4 +81,13 @@ input:focus {
     //height:100%;
     margin-top:50px;
     margin-bottom:50px;
+}
+
+.item-ios{
+    background-color: transparent;
+}
+
+.fab-ios {
+    color: #fff;
+    background-color:orange;
 }

@@ -24,114 +24,7 @@
         <ion-list *ngSwitchCase="'Median'">
             <ion-item class="itemlist" style="background-color: transparent;color:white">
                 <div *ngIf="Properties">
-                    <ion-row class="rows" style="text-align: center;">
-<ion-col>
-    <strong style="color:orange">KPI</strong>
-</ion-col>
-<ion-col>
-    <strong style="color:orange">Value</strong>
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Radius
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.maximalDistance | number:'.0-0'}}m
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Value/m<sup>2</sup>
-    </ion-col>
-    <ion-col style="text-align: center"> CHF {{rentalFinancials.medianMarketValuePerSquareMeter | number:'.2-2' }}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Expected rent/m<sup>2</sup>
-    </ion-col>
-    <ion-col style="text-align: center"> CHF {{rentalFinancials.medianExpectedRentPerSquareMeter | number:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Gross return
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianExpectedRentPerMarketValue | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Vacancy rate
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianUnrealizedRentPerNetRent | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        OpEx in % of rents
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianOperatingExpensesPerNetRent | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        CapEx in % of rents
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianMaintenanceAndInvestmentsPerNetRent | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Total outflows in % of rents
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianTotalExpensesPerNetRent | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Net cash flow/m<sup>2</sup>
-    </ion-col>
-    <ion-col style="text-align: center"> CHF {{rentalFinancials.medianNcfPerSquareMeter | number:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        NCF Return
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianNcfPerMarketValue | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows">
-    <ion-col>
-        Change in value
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianValueChangePerMarketValue | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-
-<ion-row class="rows lastrow">
-    <ion-col>
-        Total Performance
-    </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.medianPerformancePerMarketValue | percent:'.2-2'}}
-</ion-col>
-</ion-row>
-</div>
-
-<div *ngIf="Contracts">
-    <ion-row class="rows" style="text-align: center">
+                    <ion-row class="rows headrow">
 <ion-col>
     <strong>KPI</strong>
 </ion-col>
@@ -144,7 +37,114 @@
     <ion-col>
         Radius
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalContracts.maximalDistance | number:'.0-0'}} m
+    <ion-col class="coldata"> {{rentalFinancials.maximalDistance | number:'.0-0'}}m
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Value/m<sup>2</sup>
+    </ion-col>
+    <ion-col  class="coldata"> CHF {{rentalFinancials.medianMarketValuePerSquareMeter | number:'.2-2' }}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Expected rent/m<sup>2</sup>
+    </ion-col>
+    <ion-col  class="coldata"> CHF {{rentalFinancials.medianExpectedRentPerSquareMeter | number:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Gross return
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianExpectedRentPerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Vacancy rate
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianUnrealizedRentPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        OpEx in % of rents
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianOperatingExpensesPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        CapEx in % of rents
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianMaintenanceAndInvestmentsPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Total outflows in % of rents
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianTotalExpensesPerNetRent | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Net cash flow/m<sup>2</sup>
+    </ion-col>
+    <ion-col  class="coldata"> CHF {{rentalFinancials.medianNcfPerSquareMeter | number:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        NCF Return
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianNcfPerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Change in value
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianValueChangePerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+
+<ion-row class="rows lastrow">
+    <ion-col>
+        Total Performance
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalFinancials.medianPerformancePerMarketValue | percent:'.2-2'}}
+</ion-col>
+</ion-row>
+</div>
+
+<div *ngIf="Contracts">
+    <ion-row class="rows headrow">
+<ion-col>
+    <strong>KPI</strong>
+</ion-col>
+<ion-col>
+    <strong>Value</strong>
+</ion-col>
+</ion-row>
+
+<ion-row class="rows">
+    <ion-col>
+        Radius
+    </ion-col>
+    <ion-col  class="coldata"> {{rentalContracts.maximalDistance | number:'.0-0'}} m
 </ion-col>
 </ion-row>
 
@@ -152,7 +152,7 @@
     <ion-col>
         Expected rent/m<sup>2</sup>
     </ion-col>
-    <ion-col style="text-align: center"> CHF {{rentalContracts.medianNetRentPerSquareMeter | number:'.2-2' }}
+    <ion-col  class="coldata"> CHF {{rentalContracts.medianNetRentPerSquareMeter | number:'.2-2' }}
 </ion-col>
 </ion-row>
 </div>
@@ -163,12 +163,12 @@
 <ion-list *ngSwitchCase="'Average'">
     <ion-item class="itemlist" style="background-color: transparent;color:white">
         <div *ngIf="Properties">
-            <ion-row class="rows" style="text-align:center;">
+            <ion-row class="rows  headrow">
 <ion-col>
-    <strong style="color:orange">KPI</strong>
+    <strong >KPI</strong>
 </ion-col>
 <ion-col>
-    <strong style="color:orange">Value</strong>
+    <strong>Value</strong>
 </ion-col>
 </ion-row>
 
@@ -176,7 +176,7 @@
     <ion-col>
         Radius
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.maximalDistance | number:'.0-0'}}m
+    <ion-col  class="coldata"> {{rentalFinancials.maximalDistance | number:'.0-0'}}m
 </ion-col>
 </ion-row>
 
@@ -184,7 +184,7 @@
     <ion-col>
         Value/m<sup>2</sup>
     </ion-col>
-    <ion-col style="text-align: center"> CHF {{rentalFinancials.meanMarketValuePerSquareMeter | number:'.2-2' }}
+    <ion-col  class="coldata"> CHF {{rentalFinancials.meanMarketValuePerSquareMeter | number:'.2-2' }}
 </ion-col>
 </ion-row>
 
@@ -192,7 +192,7 @@
     <ion-col>
         Expected rent/m<sup>2</sup>
     </ion-col>
-    <ion-col style="text-align: center"> CHF {{rentalFinancials.meanExpectedRentPerSquareMeter | number:'.2-2'}}
+    <ion-col  class="coldata"> CHF {{rentalFinancials.meanExpectedRentPerSquareMeter | number:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -200,7 +200,7 @@
     <ion-col>
         Gross return
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanExpectedRentPerMarketValue | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanExpectedRentPerMarketValue | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -208,7 +208,7 @@
     <ion-col>
         Vacancy rate
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanUnrealizedRentPerNetRent | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanUnrealizedRentPerNetRent | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -216,7 +216,7 @@
     <ion-col>
         OpEx in % of rents
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanOperatingExpensesPerNetRent | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanOperatingExpensesPerNetRent | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -224,7 +224,7 @@
     <ion-col>
         CapEx in % of rents
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanMaintenanceAndInvestmentsPerNetRent | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanMaintenanceAndInvestmentsPerNetRent | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -232,7 +232,7 @@
     <ion-col>
         Total outflows in % of rents
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanTotalExpensesPerNetRent | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanTotalExpensesPerNetRent | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -240,7 +240,7 @@
     <ion-col>
         Net cash flow/m<sup>2</sup>
     </ion-col>
-    <ion-col style="text-align: center"> CHF {{rentalFinancials.meanNcfPerSquareMeter | number:'.2-2'}}
+    <ion-col  class="coldata"> CHF {{rentalFinancials.meanNcfPerSquareMeter | number:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -248,7 +248,7 @@
     <ion-col>
         NCF Return
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanNcfPerMarketValue | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanNcfPerMarketValue | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -256,7 +256,7 @@
     <ion-col>
         Change in value
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanValueChangePerMarketValue | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanValueChangePerMarketValue | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 
@@ -264,13 +264,13 @@
     <ion-col>
         Total Performance
     </ion-col>
-    <ion-col style="text-align: center"> {{rentalFinancials.meanPerformancePerMarketValue | percent:'.2-2'}}
+    <ion-col  class="coldata"> {{rentalFinancials.meanPerformancePerMarketValue | percent:'.2-2'}}
 </ion-col>
 </ion-row>
 </div>
 
 <div *ngIf="Contracts">
-    <ion-row class="rows" style="text-align: center">
+    <ion-row class="rows headrow" >
 <ion-col>
     <strong>KPI</strong>
 </ion-col>
@@ -283,7 +283,7 @@
     <ion-col>
         Radius
     </ion-col>
-    <ion-col style="text-align: center">{{rentalContracts.maximalDistance | number:'.0-0'}} m
+    <ion-col  class="coldata">{{rentalContracts.maximalDistance | number:'.0-0'}} m
 </ion-col>
 </ion-row>
 
@@ -291,7 +291,7 @@
     <ion-col>
         Expected rent/m<sup>2</sup>
     </ion-col>
-    <ion-col style="text-align: center">CHF {{rentalContracts.medianNetRentPerSquareMeter | number:'.2-2' }}
+    <ion-col  class="coldata">CHF {{rentalContracts.medianNetRentPerSquareMeter | number:'.2-2' }}
 </ion-col>
 </ion-row>
 </div>

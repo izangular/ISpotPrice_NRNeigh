@@ -1,6 +1,6 @@
 
 #map {
-  height: 100%;
+ height: 88%;
  // position:relative;
   //z-index:4;
 }
@@ -250,3 +250,21 @@ border-color: orange;
     border-top: 0.55px solid #c8c7cc;
 }
 
+.loading-ios .loading-wrapper{
+  background-color: black;
+  color:orange;
+}
+
+
+.loading-md .loading-wrapper{
+  background-color: black;
+  color:orange;
+}
+
+.loading-md .spinner-bubbles circle{
+  fill:orange;
+}
+
+.loading-ios .spinner-bubbles circle{
+  fill:orange;
+}
